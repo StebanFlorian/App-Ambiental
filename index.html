@@ -7,17 +7,29 @@
   <title>Acta de Visita Técnica - EEP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4"
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19.0.0",
+      "react/": "https://esm.sh/react@19.0.0/",
+      "react-dom": "https://esm.sh/react-dom@19.0.0",
+      "react-dom/": "https://esm.sh/react-dom@19.0.0/"
+    }
   }
-}
-</script>
+  </script>
+  <style>
+    /* Asegura que el contenedor root ocupe el espacio necesario */
+    #root {
+      min-height: 100vh;
+    }
+    @media print {
+      .no-print { display: none !important; }
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans">
   <div id="root"></div>
+  <!-- El script type="module" es CRÍTICO para que la app cargue -->
+  <script type="module" src="index.tsx"></script>
 </body>
 </html>
