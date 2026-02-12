@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acta de Visita Técnica - EEP</title>
+  <title>Acta de Visita Técnica - EEP Bogotá</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script type="importmap">
@@ -18,31 +18,81 @@
   }
   </script>
   <style>
+    :root {
+      color-scheme: light;
+    }
     #root {
       min-height: 100vh;
     }
+    /* Estilos específicos para impresión (Generación de PDF) */
     @media print {
       body {
         background-color: white !important;
-        margin: 0;
-        padding: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      .no-print {
+      
+      /* Ocultar elementos innecesarios */
+      .print\:hidden {
         display: none !important;
       }
+      
+      /* Asegurar que la plantilla ocupe todo el ancho */
+      .print\:block {
+        display: block !important;
+        width: 100% !important;
+      }
+
       @page {
-        margin: 1cm;
+        margin: 1.5cm;
         size: letter portrait;
       }
-      /* Forzamos que las imágenes de firma sean visibles */
+
+      /* Evitar que las tablas se corten de forma extraña */
+      table {
+        page-break-inside: auto;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+      
+      /* Forzar visualización de imágenes y fondos */
       img {
         max-width: 100%;
-        display: block;
+        image-rendering: auto;
       }
+      
+      /* Reset de tipografía para impresión profesional */
+      * {
+        font-family: 'Arial', 'Helvetica', sans-serif !important;
+      }
+    }
+
+    /* Mejora de scroll y apariencia general en pantalla */
+    body {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 font-sans">
+<body class="bg-gray-50 text-slate-900 font-sans antialiased">
   <div id="root"></div>
   <script type="module" src="index.tsx"></script>
 </body>
