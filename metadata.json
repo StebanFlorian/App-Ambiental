@@ -1,0 +1,7 @@
+{
+  "name": "EEP Bogotá - Acta de Visita Técnica",
+  "description": "Aplicación para la evaluación, control y seguimiento de componentes de la Estructura Ecológica Principal (EEP) de Bogotá, basada en el formato PM04-PR88-M2.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
