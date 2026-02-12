@@ -77,212 +77,366 @@ const App: React.FC = () => {
     setTimeout(() => setIsSaved(false), 3000);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="min-h-screen pb-28 md:pb-8 print:pb-0 print:bg-white bg-slate-50">
-      {/* HEADER SECTION */}
-      <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-30 shadow-sm print:relative print:shadow-none">
-        <div className="max-w-5xl mx-auto px-4 py-2 md:py-3 flex justify-between items-center">
-          <div className="flex items-center gap-2 md:gap-4">
-            <img src="https://picsum.photos/seed/bogota/80/32" alt="Logo" className="h-8 md:h-10 object-contain" />
-            <div className="border-l pl-3 hidden sm:block">
-              <h1 className="text-[10px] md:text-sm font-bold uppercase text-gray-700 leading-tight">Gestión EEP Bogotá</h1>
-              <p className="text-[9px] md:text-xs text-gray-400 font-medium">Acta Técnica PM04</p>
-            </div>
-          </div>
-          <div className="flex gap-1 md:gap-2 print:hidden">
-            <button
-              onClick={resetForm}
-              className="p-2 md:px-4 md:py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-full transition-colors"
-              title="Reiniciar"
-            >
-              <i className="fas fa-undo"></i><span className="hidden md:inline ml-2">Reiniciar</span>
-            </button>
-            <button
-              onClick={downloadReport}
-              className={`px-3 py-2 md:px-4 md:py-2 text-xs font-bold rounded-full shadow-sm transition-all flex items-center gap-2 ${
-                isSaved ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'
-              }`}
-            >
-              <i className={`fas ${isSaved ? 'fa-check' : 'fa-download'}`}></i>
-              <span className="hidden md:inline">{isSaved ? 'Guardado' : 'Exportar'}</span>
-            </button>
-          </div>
+      
+      {/* 
+        PLANTILLA DE IMPRESIÓN OFICIAL (Solo visible al imprimir)
+        Esta sección replica la estructura del formato PM04-PR88-M2
+      */}
+      <div className="hidden print:block font-serif text-[12px] leading-tight p-4">
+        {/* Header Oficial */}
+        <table className="w-full border-collapse border border-black mb-4">
+          <tr>
+            <td className="border border-black p-2 w-1/4 text-center">
+              <img src="https://picsum.photos/seed/bogota/100/40" alt="Logo" className="mx-auto" />
+            </td>
+            <td className="border border-black p-2 w-1/2 text-center align-middle">
+              <p className="font-bold text-[14px] uppercase">ALCALDÍA MAYOR DE BOGOTÁ</p>
+              <p className="font-bold uppercase">Evaluación, Control y Seguimiento</p>
+              <p className="font-medium">Acta de visita técnica a componentes de la EEP</p>
+            </td>
+            <td className="border border-black p-0 w-1/4">
+              <table className="w-full border-collapse">
+                <tr><td className="border-b border-black p-1"><strong>Código:</strong> PM04-PR88-M2</td></tr>
+                <tr><td className="border-b border-black p-1"><strong>Versión:</strong> 3</td></tr>
+                <tr><td className="p-1"><strong>Vigencia:</strong> 2024</td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        {/* Datos Generales Print */}
+        <div className="border border-black bg-gray-100 p-1 font-bold uppercase mb-2">Datos Generales</div>
+        <table className="w-full border-collapse border border-black mb-4">
+          <tbody>
+            <tr>
+              <td className="border border-black p-1 w-1/3"><strong>Componente:</strong> {formData.generalData.componente}</td>
+              <td className="border border-black p-1 w-1/3"><strong>Dirección:</strong> {formData.generalData.direccion}</td>
+              <td className="border border-black p-1 w-1/3"><strong>Localidad:</strong> {formData.generalData.localidad}</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1"><strong>Barrio:</strong> {formData.generalData.barrio}</td>
+              <td className="border border-black p-1"><strong>Radicado:</strong> {formData.generalData.radicadoEntrada}</td>
+              <td className="border border-black p-1"><strong>Fecha Rad:</strong> {formData.generalData.fechaRadicado}</td>
+            </tr>
+            <tr>
+              <td className="border border-black p-1"><strong>Fecha Visita:</strong> {formData.generalData.fechaVisita}</td>
+              <td className="border border-black p-1"><strong>Hora Inicio:</strong> {formData.generalData.horaInicio}</td>
+              <td className="border border-black p-1"><strong>Expediente:</strong> {formData.generalData.expediente}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Motivo Print */}
+        <div className="border border-black bg-gray-100 p-1 font-bold uppercase mb-1">1. Motivo de la Visita</div>
+        <div className="border border-black p-2 min-h-[60px] mb-4 italic text-justify">
+          {formData.motivoVisita || "No especificado"}
         </div>
-      </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6 md:space-y-10 bg-white md:my-6 md:shadow-2xl md:rounded-3xl print:shadow-none print:my-0 print:rounded-none">
-        
-        {/* Form Identity - Compact on Mobile */}
-        <div className="flex flex-wrap justify-between items-center gap-2 border-b pb-4 mb-2">
-          <div className="flex flex-col">
-            <span className="text-[9px] font-black text-blue-600 uppercase">Documento Oficial</span>
-            <span className="text-xs font-mono font-bold text-gray-800">PM04-PR88-M2 (v3)</span>
-          </div>
-          <div className="text-right">
-            <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold uppercase">Visita Técnica</span>
-          </div>
+        {/* Situaciones Encontradas Print */}
+        <div className="border border-black bg-gray-100 p-1 font-bold uppercase mb-1">2. Situaciones Encontradas</div>
+        <table className="w-full border-collapse border border-black mb-4 text-[10px]">
+          <thead>
+            <tr className="bg-gray-50 text-center">
+              <th className="border border-black p-1 w-[60%]">Ítem de Evaluación</th>
+              <th className="border border-black p-1 w-[5%]">C</th>
+              <th className="border border-black p-1 w-[5%]">I</th>
+              <th className="border border-black p-1 w-[5%]">NA</th>
+              <th className="border border-black p-1">Descripción / Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {formData.situacionesEncontradas.map(item => (
+              <tr key={item.id}>
+                <td className="border border-black p-1">{item.label}</td>
+                <td className="border border-black p-1 text-center font-bold">{item.status === 'C' ? 'X' : ''}</td>
+                <td className="border border-black p-1 text-center font-bold">{item.status === 'I' ? 'X' : ''}</td>
+                <td className="border border-black p-1 text-center font-bold">{item.status === 'NA' ? 'X' : ''}</td>
+                <td className="border border-black p-1">{item.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Observaciones Específicas Print */}
+        <div className="border border-black bg-gray-100 p-1 font-bold uppercase mb-1">3. Observaciones Específicas</div>
+        <table className="w-full border-collapse border border-black mb-4 text-[10px]">
+          <thead>
+            <tr className="bg-gray-50 text-center">
+              <th className="border border-black p-1 w-[60%]">Hallazgo / Evidencia</th>
+              <th className="border border-black p-1 w-[5%]">SI</th>
+              <th className="border border-black p-1 w-[5%]">NO</th>
+              <th className="border border-black p-1 w-[5%]">NA</th>
+              <th className="border border-black p-1">Descripción / Detalles</th>
+            </tr>
+          </thead>
+          <tbody>
+            {formData.observacionesEspecificas.map(item => (
+              <tr key={item.id}>
+                <td className="border border-black p-1">{item.label}</td>
+                <td className="border border-black p-1 text-center font-bold">{item.status === 'SI' ? 'X' : ''}</td>
+                <td className="border border-black p-1 text-center font-bold">{item.status === 'NO' ? 'X' : ''}</td>
+                <td className="border border-black p-1 text-center font-bold">{item.status === 'NA' ? 'X' : ''}</td>
+                <td className="border border-black p-1">{item.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Consideraciones Print */}
+        <div className="border border-black bg-gray-100 p-1 font-bold uppercase mb-1">Consideraciones Finales</div>
+        <div className="border border-black p-2 min-h-[100px] mb-8 text-justify">
+          {formData.consideracionesFinales || "Sin observaciones adicionales."}
         </div>
 
-        {/* Section: General Data */}
-        <section className="space-y-4">
-          <SectionTitle icon="fa-info-circle" title="Datos Generales" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-            <FormField label="Componente de la EEP" value={formData.generalData.componente} onChange={(v) => handleGeneralDataChange('componente', v)} />
-            <FormField label="Dirección" value={formData.generalData.direccion} onChange={(v) => handleGeneralDataChange('direccion', v)} />
-            <FormField label="Localidad" value={formData.generalData.localidad} onChange={(v) => handleGeneralDataChange('localidad', v)} />
-            <FormField label="Barrio" value={formData.generalData.barrio} onChange={(v) => handleGeneralDataChange('barrio', v)} />
-            <FormField label="Radicado de Entrada" value={formData.generalData.radicadoEntrada} onChange={(v) => handleGeneralDataChange('radicadoEntrada', v)} />
-            <FormField label="Fecha Radicado" type="date" value={formData.generalData.fechaRadicado} onChange={(v) => handleGeneralDataChange('fechaRadicado', v)} />
-            <FormField label="Proceso" value={formData.generalData.proceso} onChange={(v) => handleGeneralDataChange('proceso', v)} />
-            <FormField label="Fecha de Visita" type="date" value={formData.generalData.fechaVisita} onChange={(v) => handleGeneralDataChange('fechaVisita', v)} />
-            <FormField label="Hora de Inicio" type="time" value={formData.generalData.horaInicio} onChange={(v) => handleGeneralDataChange('horaInicio', v)} />
-            <FormField label="Autoridad Competente" value={formData.generalData.autoridadCompetente} onChange={(v) => handleGeneralDataChange('autoridadCompetente', v)} />
-            <FormField label="Expediente N°" value={formData.generalData.expediente} onChange={(v) => handleGeneralDataChange('expediente', v)} />
-          </div>
-        </section>
-
-        {/* Section 1: Motivo */}
-        <section className="space-y-4">
-          <SectionTitle icon="fa-bullseye" title="1- Motivo de la Visita" />
-          <textarea
-            className="w-full min-h-[80px] md:min-h-[120px] p-4 text-sm border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50/50"
-            placeholder="Especifique el motivo de la inspección..."
-            value={formData.motivoVisita}
-            onChange={(e) => setFormData(prev => ({ ...prev, motivoVisita: e.target.value }))}
-          />
-        </section>
-
-        {/* Section 2: Situaciones Encontradas - Responsive List/Table */}
-        <section className="space-y-4">
-          <SectionTitle icon="fa-tasks" title="2- Situaciones Encontradas" />
-          
-          {/* Mobile View: Cards */}
-          <div className="md:hidden space-y-4">
-            {formData.situacionesEncontradas.map((item) => (
-              <EvaluationCard
-                key={item.id}
-                item={item}
-                options={[EvaluationStatus.C, EvaluationStatus.I, EvaluationStatus.NA]}
-                onStatusChange={(status) => handleChecklistChange('situacionesEncontradas', item.id, 'status', status)}
-                onDescriptionChange={(desc) => handleChecklistChange('situacionesEncontradas', item.id, 'description', desc)}
-              />
-            ))}
-          </div>
-
-          {/* Tablet/Desktop View: Table */}
-          <div className="hidden md:block overflow-hidden border rounded-2xl shadow-sm">
-            <table className="w-full text-left border-collapse">
-              <thead className="bg-slate-50 border-b">
-                <tr>
-                  <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest w-1/2">Ítem</th>
-                  <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Estado</th>
-                  <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Observación</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {formData.situacionesEncontradas.map((item) => (
-                  <ChecklistRow
-                    key={item.id}
-                    item={item}
-                    options={[EvaluationStatus.C, EvaluationStatus.I, EvaluationStatus.NA]}
-                    onStatusChange={(status) => handleChecklistChange('situacionesEncontradas', item.id, 'status', status)}
-                    onDescriptionChange={(desc) => handleChecklistChange('situacionesEncontradas', item.id, 'description', desc)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* Section 3: Observaciones Específicas */}
-        <section className="space-y-4">
-          <SectionTitle icon="fa-clipboard-check" title="3- Observaciones Específicas" />
-          
-          {/* Mobile View: Cards */}
-          <div className="md:hidden space-y-4">
-            {formData.observacionesEspecificas.map((item) => (
-              <EvaluationCard
-                key={item.id}
-                item={item}
-                options={[EvaluationStatus.SI, EvaluationStatus.NO, EvaluationStatus.NA]}
-                onStatusChange={(status) => handleChecklistChange('observacionesEspecificas', item.id, 'status', status)}
-                onDescriptionChange={(desc) => handleChecklistChange('observacionesEspecificas', item.id, 'description', desc)}
-              />
-            ))}
-          </div>
-
-          {/* Desktop View: Table */}
-          <div className="hidden md:block overflow-hidden border rounded-2xl shadow-sm">
-            <table className="w-full text-left border-collapse">
-              <thead className="bg-slate-50 border-b">
-                <tr>
-                  <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest w-1/2">Hallazgo</th>
-                  <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Presencia</th>
-                  <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Detalles</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {formData.observacionesEspecificas.map((item) => (
-                  <ChecklistRow
-                    key={item.id}
-                    item={item}
-                    options={[EvaluationStatus.SI, EvaluationStatus.NO, EvaluationStatus.NA]}
-                    onStatusChange={(status) => handleChecklistChange('observacionesEspecificas', item.id, 'status', status)}
-                    onDescriptionChange={(desc) => handleChecklistChange('observacionesEspecificas', item.id, 'description', desc)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* Final Considerations */}
-        <section className="space-y-4">
-          <SectionTitle icon="fa-comment-dots" title="Consideraciones Finales" />
-          <textarea
-            className="w-full min-h-[120px] md:min-h-[180px] p-4 text-sm border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50/50"
-            placeholder="Conclusiones y compromisos finales..."
-            value={formData.consideracionesFinales}
-            onChange={(e) => setFormData(prev => ({ ...prev, consideracionesFinales: e.target.value }))}
-          />
-        </section>
-
-        {/* Signatures Section */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 pt-8 border-t">
-          <SignatureBox
-            title="Atendido Por"
-            person={formData.firmas.atendidaPor}
-            onDataChange={(field, val) => handleFirmaChange('atendidaPor', field, val)}
-            icon="fa-user-tie"
-          />
-          <SignatureBox
-            title="Profesional Responsable"
-            person={formData.firmas.realizadaPor}
-            onDataChange={(field, val) => handleFirmaChange('realizadaPor', field, val)}
-            icon="fa-id-card-clip"
-          />
-        </section>
-      </main>
-
-      {/* Optimized Floating Action Bar for Mobile */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-full p-2 md:hidden flex justify-between gap-2 z-50 print:hidden">
-        <button
-          onClick={downloadReport}
-          className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-full font-black text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-transform"
-        >
-          <i className="fas fa-save"></i> Guardar
-        </button>
-        <button
-          onClick={() => window.print()}
-          className="w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
-        >
-          <i className="fas fa-print"></i>
-        </button>
+        {/* Firmas Print */}
+        <table className="w-full border-collapse">
+          <tr>
+            <td className="w-1/2 pr-4 align-top">
+              <div className="border-t border-black pt-2 mt-20">
+                {formData.firmas.atendidaPor.signatureImage && (
+                  <img src={formData.firmas.atendidaPor.signatureImage} className="h-16 mb-2" />
+                )}
+                <p><strong>Firma:</strong> _________________________</p>
+                <p><strong>Nombre:</strong> {formData.firmas.atendidaPor.nombre}</p>
+                <p><strong>Cargo:</strong> {formData.firmas.atendidaPor.cargo}</p>
+                <p><strong>C.C:</strong> ___________________________</p>
+              </div>
+            </td>
+            <td className="w-1/2 pl-4 align-top">
+              <div className="border-t border-black pt-2 mt-20">
+                {formData.firmas.realizadaPor.signatureImage && (
+                  <img src={formData.firmas.realizadaPor.signatureImage} className="h-16 mb-2" />
+                )}
+                <p><strong>Firma Profesional:</strong> ___________________</p>
+                <p><strong>Nombre:</strong> {formData.firmas.realizadaPor.nombre}</p>
+                <p><strong>Mat. Prof:</strong> {formData.firmas.realizadaPor.cargo}</p>
+                <p><strong>Dependencia:</strong> {formData.firmas.realizadaPor.empresa}</p>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
 
-      <footer className="text-center py-10 text-[10px] font-bold text-slate-300 uppercase tracking-widest print:hidden">
-        EEP Bogotá - Sistema de Inspección Digital
-      </footer>
+      {/* --- INTERFAZ DE USUARIO (Screen Only) --- */}
+      <div className="print:hidden">
+        {/* HEADER SECTION */}
+        <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-30 shadow-sm">
+          <div className="max-w-5xl mx-auto px-4 py-2 md:py-3 flex justify-between items-center">
+            <div className="flex items-center gap-2 md:gap-4">
+              <img src="https://picsum.photos/seed/bogota/80/32" alt="Logo" className="h-8 md:h-10 object-contain" />
+              <div className="border-l pl-3 hidden sm:block">
+                <h1 className="text-[10px] md:text-sm font-bold uppercase text-gray-700 leading-tight">Gestión EEP Bogotá</h1>
+                <p className="text-[9px] md:text-xs text-gray-400 font-medium">Acta Técnica PM04</p>
+              </div>
+            </div>
+            <div className="flex gap-1 md:gap-2">
+              <button
+                onClick={resetForm}
+                className="p-2 md:px-4 md:py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                title="Reiniciar"
+              >
+                <i className="fas fa-undo"></i><span className="hidden md:inline ml-2">Reiniciar</span>
+              </button>
+              <button
+                onClick={handlePrint}
+                className="px-3 py-2 md:px-4 md:py-2 text-xs font-bold bg-gray-800 text-white rounded-full shadow-sm flex items-center gap-2 hover:bg-black transition-all"
+              >
+                <i className="fas fa-file-pdf"></i>
+                <span className="hidden md:inline">Descargar PDF</span>
+              </button>
+              <button
+                onClick={downloadReport}
+                className={`px-3 py-2 md:px-4 md:py-2 text-xs font-bold rounded-full shadow-sm transition-all flex items-center gap-2 ${
+                  isSaved ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'
+                }`}
+              >
+                <i className={`fas ${isSaved ? 'fa-check' : 'fa-download'}`}></i>
+                <span className="hidden md:inline">{isSaved ? 'Guardado' : 'Exportar JSON'}</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6 md:space-y-10 bg-white md:my-6 md:shadow-2xl md:rounded-3xl">
+          
+          {/* Form Identity - Compact on Mobile */}
+          <div className="flex flex-wrap justify-between items-center gap-2 border-b pb-4 mb-2">
+            <div className="flex flex-col">
+              <span className="text-[9px] font-black text-blue-600 uppercase">Documento Oficial</span>
+              <span className="text-xs font-mono font-bold text-gray-800">PM04-PR88-M2 (v3)</span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold uppercase">Visita Técnica</span>
+            </div>
+          </div>
+
+          {/* Section: General Data */}
+          <section className="space-y-4">
+            <SectionTitle icon="fa-info-circle" title="Datos Generales" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+              <FormField label="Componente de la EEP" value={formData.generalData.componente} onChange={(v) => handleGeneralDataChange('componente', v)} />
+              <FormField label="Dirección" value={formData.generalData.direccion} onChange={(v) => handleGeneralDataChange('direccion', v)} />
+              <FormField label="Localidad" value={formData.generalData.localidad} onChange={(v) => handleGeneralDataChange('localidad', v)} />
+              <FormField label="Barrio" value={formData.generalData.barrio} onChange={(v) => handleGeneralDataChange('barrio', v)} />
+              <FormField label="Radicado de Entrada" value={formData.generalData.radicadoEntrada} onChange={(v) => handleGeneralDataChange('radicadoEntrada', v)} />
+              <FormField label="Fecha Radicado" type="date" value={formData.generalData.fechaRadicado} onChange={(v) => handleGeneralDataChange('fechaRadicado', v)} />
+              <FormField label="Proceso" value={formData.generalData.proceso} onChange={(v) => handleGeneralDataChange('proceso', v)} />
+              <FormField label="Fecha de Visita" type="date" value={formData.generalData.fechaVisita} onChange={(v) => handleGeneralDataChange('fechaVisita', v)} />
+              <FormField label="Hora de Inicio" type="time" value={formData.generalData.horaInicio} onChange={(v) => handleGeneralDataChange('horaInicio', v)} />
+              <FormField label="Autoridad Competente" value={formData.generalData.autoridadCompetente} onChange={(v) => handleGeneralDataChange('autoridadCompetente', v)} />
+              <FormField label="Expediente N°" value={formData.generalData.expediente} onChange={(v) => handleGeneralDataChange('expediente', v)} />
+            </div>
+          </section>
+
+          {/* Section 1: Motivo */}
+          <section className="space-y-4">
+            <SectionTitle icon="fa-bullseye" title="1- Motivo de la Visita" />
+            <textarea
+              className="w-full min-h-[80px] md:min-h-[120px] p-4 text-sm border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50/50"
+              placeholder="Especifique el motivo de la inspección..."
+              value={formData.motivoVisita}
+              onChange={(e) => setFormData(prev => ({ ...prev, motivoVisita: e.target.value }))}
+            />
+          </section>
+
+          {/* Section 2: Situaciones Encontradas */}
+          <section className="space-y-4">
+            <SectionTitle icon="fa-tasks" title="2- Situaciones Encontradas" />
+            
+            {/* Mobile View: Cards */}
+            <div className="md:hidden space-y-4">
+              {formData.situacionesEncontradas.map((item) => (
+                <EvaluationCard
+                  key={item.id}
+                  item={item}
+                  options={[EvaluationStatus.C, EvaluationStatus.I, EvaluationStatus.NA]}
+                  onStatusChange={(status) => handleChecklistChange('situacionesEncontradas', item.id, 'status', status)}
+                  onDescriptionChange={(desc) => handleChecklistChange('situacionesEncontradas', item.id, 'description', desc)}
+                />
+              ))}
+            </div>
+
+            {/* Tablet/Desktop View: Table */}
+            <div className="hidden md:block overflow-hidden border rounded-2xl shadow-sm">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-50 border-b">
+                  <tr>
+                    <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest w-1/2">Ítem</th>
+                    <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Estado</th>
+                    <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Observación</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {formData.situacionesEncontradas.map((item) => (
+                    <ChecklistRow
+                      key={item.id}
+                      item={item}
+                      options={[EvaluationStatus.C, EvaluationStatus.I, EvaluationStatus.NA]}
+                      onStatusChange={(status) => handleChecklistChange('situacionesEncontradas', item.id, 'status', status)}
+                      onDescriptionChange={(desc) => handleChecklistChange('situacionesEncontradas', item.id, 'description', desc)}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Section 3: Observaciones Específicas */}
+          <section className="space-y-4">
+            <SectionTitle icon="fa-clipboard-check" title="3- Observaciones Específicas" />
+            
+            {/* Mobile View: Cards */}
+            <div className="md:hidden space-y-4">
+              {formData.observacionesEspecificas.map((item) => (
+                <EvaluationCard
+                  key={item.id}
+                  item={item}
+                  options={[EvaluationStatus.SI, EvaluationStatus.NO, EvaluationStatus.NA]}
+                  onStatusChange={(status) => handleChecklistChange('observacionesEspecificas', item.id, 'status', status)}
+                  onDescriptionChange={(desc) => handleChecklistChange('observacionesEspecificas', item.id, 'description', desc)}
+                />
+              ))}
+            </div>
+
+            {/* Desktop View: Table */}
+            <div className="hidden md:block overflow-hidden border rounded-2xl shadow-sm">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-50 border-b">
+                  <tr>
+                    <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest w-1/2">Hallazgo</th>
+                    <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Presencia</th>
+                    <th className="p-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Detalles</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {formData.observacionesEspecificas.map((item) => (
+                    <ChecklistRow
+                      key={item.id}
+                      item={item}
+                      options={[EvaluationStatus.SI, EvaluationStatus.NO, EvaluationStatus.NA]}
+                      onStatusChange={(status) => handleChecklistChange('observacionesEspecificas', item.id, 'status', status)}
+                      onDescriptionChange={(desc) => handleChecklistChange('observacionesEspecificas', item.id, 'description', desc)}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* Final Considerations */}
+          <section className="space-y-4">
+            <SectionTitle icon="fa-comment-dots" title="Consideraciones Finales" />
+            <textarea
+              className="w-full min-h-[120px] md:min-h-[180px] p-4 text-sm border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50/50"
+              placeholder="Conclusiones y compromisos finales..."
+              value={formData.consideracionesFinales}
+              onChange={(e) => setFormData(prev => ({ ...prev, consideracionesFinales: e.target.value }))}
+            />
+          </section>
+
+          {/* Signatures Section */}
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 pt-8 border-t">
+            <SignatureBox
+              title="Atendido Por"
+              person={formData.firmas.atendidaPor}
+              onDataChange={(field, val) => handleFirmaChange('atendidaPor', field, val)}
+              icon="fa-user-tie"
+            />
+            <SignatureBox
+              title="Profesional Responsable"
+              person={formData.firmas.realizadaPor}
+              onDataChange={(field, val) => handleFirmaChange('realizadaPor', field, val)}
+              icon="fa-id-card-clip"
+            />
+          </section>
+        </main>
+
+        {/* Optimized Floating Action Bar for Mobile */}
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-full p-2 md:hidden flex justify-between gap-2 z-50">
+          <button
+            onClick={handlePrint}
+            className="flex-1 bg-slate-800 text-white py-3 px-6 rounded-full font-black text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-transform"
+          >
+            <i className="fas fa-file-pdf"></i> PDF
+          </button>
+          <button
+            onClick={downloadReport}
+            className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-full font-black text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-transform"
+          >
+            <i className="fas fa-save"></i> JSON
+          </button>
+        </div>
+
+        <footer className="text-center py-10 text-[10px] font-bold text-slate-300 uppercase tracking-widest no-print">
+          EEP Bogotá - Sistema de Inspección Digital
+        </footer>
+      </div>
     </div>
   );
 };
