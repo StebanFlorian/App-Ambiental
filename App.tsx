@@ -81,32 +81,103 @@ const App: React.FC = () => {
     window.print();
   };
 
+  // Componente interno para la información de control de cambios sin estructura de tabla
+  const ControlDeCambiosInfo = () => (
+    <div className="mt-8 border-t border-slate-200 pt-6">
+      <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Historial de Revisiones (Control de Cambios)</h3>
+      <div className="space-y-4">
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] font-bold text-slate-800">Versión 3</span>
+            <span className="text-[10px] font-medium text-slate-500 italic">Radicado 2020IE159258 de septiembre 17 de 2020</span>
+          </div>
+          <p className="text-[11px] text-slate-600 leading-relaxed">
+            Se ajusta el formato a los lineamientos del Procedimiento Control de la información documentada del Sistema Integrado de Gestión-SIG.
+          </p>
+        </div>
+        
+        <div className="flex flex-col gap-1 opacity-70">
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] font-bold text-slate-800">Versión 2</span>
+            <span className="text-[10px] font-medium text-slate-500 italic">Radicado No. 2018IE212764 de septiembre 11 de 2018</span>
+          </div>
+          <p className="text-[11px] text-slate-600 leading-relaxed">
+            Ajuste del documento de acuerdo con los lineamientos de Subsecretaria con relación al encabezado, control de cambios y codificación, ajuste de formato, se cambia el nombre del formato.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Versión de impresión de la información de cambios (para el PDF)
+  const ControlDeCambiosPrint = () => (
+    <div className="mt-4 border border-black p-2">
+      <p className="font-bold text-[9px] uppercase border-b border-black mb-1 pb-1">Control de Cambios</p>
+      <div className="space-y-2">
+        <div>
+          <p className="font-bold text-[8px] m-0">VERSIÓN 3 - [2020IE159258 / 17-09-2020]</p>
+          <p className="text-[8px] m-0 italic">Se ajusta el formato a los lineamientos del Procedimiento Control de la información documentada del Sistema Integrado de Gestión-SIG.</p>
+        </div>
+        <div className="border-t border-black/10 pt-1">
+          <p className="font-bold text-[8px] m-0">VERSIÓN 2 - [2018IE212764 / 11-09-2018]</p>
+          <p className="text-[8px] m-0 italic">Ajuste del documento de acuerdo con los lineamientos de Subsecretaria con relación al encabezado, control de cambios y codificación, ajuste de formato, se cambia el nombre del formato.</p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen pb-28 md:pb-8 bg-slate-50 print:bg-white">
       
       {/* 
         PLANTILLA DE IMPRESIÓN OFICIAL (Solo visible al imprimir)
-        Diseñada para emular el formato físico PM04-PR88-M2
+        Diseñada para emular el formato físico PM04-PR88-M2 con el nuevo encabezado
       */}
       <div className="hidden print:block font-sans text-[11px] leading-tight p-0 max-w-[21cm] mx-auto">
-        {/* Header Oficial con bordes dobles/fuertes */}
-        <table className="w-full border-2 border-black border-collapse mb-1">
+        
+        {/* Marcador de página superior derecho */}
+        <div className="flex justify-end text-[10px] font-bold mb-0.5">
+          <span>___ de ___</span>
+        </div>
+
+        {/* Header Oficial según imagen */}
+        <table className="w-full border border-black border-collapse mb-1">
           <tbody>
             <tr>
-              <td className="border-2 border-black p-4 w-1/4 text-center align-middle">
-                <img src="https://picsum.photos/seed/bogota/120/50" alt="Alcaldía de Bogotá" className="mx-auto block" />
+              {/* Celda de Logos */}
+              <td className="border border-black p-2 w-[35%] align-middle bg-white">
+                <div className="flex items-center justify-center gap-1">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Secretar%C3%ADa_de_Ambiente_de_Bogot%C3%A1.svg/1200px-Secretar%C3%ADa_de_Ambiente_de_Bogot%C3%A1.svg.png" 
+                       alt="Secretaría de Ambiente" 
+                       className="h-10 object-contain" />
+                  <div className="w-[1px] h-8 bg-gray-400 mx-1"></div>
+                  <img src="https://seeklogo.com/images/A/alcaldia-mayor-de-bogota-logo-2623B68A57-seeklogo.com.png" 
+                       alt="Alcaldía Mayor de Bogotá" 
+                       className="h-10 object-contain" />
+                </div>
               </td>
-              <td className="border-2 border-black p-2 w-1/2 text-center align-middle">
-                <p className="font-bold text-[13px] uppercase m-0 leading-tight">ALCALDÍA MAYOR DE BOGOTÁ</p>
-                <p className="font-bold uppercase m-0 leading-tight text-[11px]">Evaluación, Control y Seguimiento</p>
-                <p className="font-medium m-0 leading-tight">Acta de visita técnica a componentes de la EEP</p>
-              </td>
-              <td className="border-2 border-black p-0 w-1/4 align-top">
-                <table className="w-full border-collapse h-full">
+              {/* Celda de Información Técnica */}
+              <td className="w-[65%] p-0">
+                <table className="w-full border-collapse">
                   <tbody>
-                    <tr><td className="border-b-2 border-black p-1"><strong>Código:</strong> PM04-PR88-M2</td></tr>
-                    <tr><td className="border-b-2 border-black p-1"><strong>Versión:</strong> 03</td></tr>
-                    <tr><td className="p-1"><strong>Vigencia:</strong> 2024</td></tr>
+                    <tr>
+                      <td colSpan={2} className="border-b border-black p-1 text-center font-bold text-[11px] uppercase">
+                        EVALUACION, CONTROL Y SEGUIMIENTO
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={2} className="border-b border-black p-2 text-center font-bold text-[10px] leading-tight">
+                        Modelo: Acta de visita técnica a componentes de la Estructura Ecológica Principal – EEP
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border-r border-black p-1 w-1/2 text-[9px]">
+                        Código: PM04-PR88-M2
+                      </td>
+                      <td className="p-1 w-1/2 text-[9px]">
+                        Versión: 3
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </td>
@@ -115,8 +186,8 @@ const App: React.FC = () => {
         </table>
 
         {/* Datos Generales Print - Layout de rejilla compacta */}
-        <div className="bg-gray-200 border-x-2 border-t-2 border-black p-1 font-bold uppercase text-center text-[10px]">Datos Generales de la Visita</div>
-        <table className="w-full border-collapse border-2 border-black mb-2">
+        <div className="bg-gray-200 border-x border-t border-black p-1 font-bold uppercase text-center text-[10px]">Datos Generales de la Visita</div>
+        <table className="w-full border-collapse border border-black mb-2">
           <tbody>
             <tr>
               <td className="border border-black p-1.5 w-1/2"><strong>Componente EEP:</strong> {formData.generalData.componente || '________________'}</td>
@@ -137,21 +208,21 @@ const App: React.FC = () => {
         </table>
 
         {/* Motivo Print */}
-        <div className="bg-gray-100 border-x-2 border-t-2 border-black p-1 font-bold uppercase text-[10px]">1. Motivo de la Visita Técnica</div>
-        <div className="border-2 border-black p-3 min-h-[50px] mb-2 text-justify">
+        <div className="bg-gray-100 border-x border-t border-black p-1 font-bold uppercase text-[10px]">1. Motivo de la Visita Técnica</div>
+        <div className="border border-black p-3 min-h-[50px] mb-2 text-justify">
           {formData.motivoVisita || "No se especificó motivo de visita."}
         </div>
 
         {/* Situaciones Encontradas Print */}
-        <div className="bg-gray-100 border-x-2 border-t-2 border-black p-1 font-bold uppercase text-[10px]">2. Evaluación de Situaciones Encontradas</div>
-        <table className="w-full border-collapse border-2 border-black mb-2 text-[9px]">
+        <div className="bg-gray-100 border-x border-t border-black p-1 font-bold uppercase text-[10px]">2. Evaluación de Situaciones Encontradas</div>
+        <table className="w-full border-collapse border border-black mb-2 text-[9px]">
           <thead>
             <tr className="bg-gray-50 text-center">
-              <th className="border-2 border-black p-1 w-[55%]">Ítem de Evaluación</th>
-              <th className="border-2 border-black p-1 w-[4%]">C</th>
-              <th className="border-2 border-black p-1 w-[4%]">I</th>
-              <th className="border-2 border-black p-1 w-[4%]">NA</th>
-              <th className="border-2 border-black p-1">Descripción / Observación Técnica</th>
+              <th className="border border-black p-1 w-[55%]">Ítem de Evaluación</th>
+              <th className="border border-black p-1 w-[4%]">C</th>
+              <th className="border border-black p-1 w-[4%]">I</th>
+              <th className="border border-black p-1 w-[4%]">NA</th>
+              <th className="border border-black p-1">Descripción / Observación Técnica</th>
             </tr>
           </thead>
           <tbody>
@@ -168,15 +239,15 @@ const App: React.FC = () => {
         </table>
 
         {/* Observaciones Específicas Print */}
-        <div className="bg-gray-100 border-x-2 border-t-2 border-black p-1 font-bold uppercase text-[10px]">3. Observaciones Específicas / Hallazgos</div>
-        <table className="w-full border-collapse border-2 border-black mb-2 text-[9px]">
+        <div className="bg-gray-100 border-x border-t border-black p-1 font-bold uppercase text-[10px]">3. Observaciones Específicas / Hallazgos</div>
+        <table className="w-full border-collapse border border-black mb-2 text-[9px]">
           <thead>
             <tr className="bg-gray-50 text-center">
-              <th className="border-2 border-black p-1 w-[55%]">Hallazgo / Evidencia Directa</th>
-              <th className="border-2 border-black p-1 w-[4%]">SI</th>
-              <th className="border-2 border-black p-1 w-[4%]">NO</th>
-              <th className="border-2 border-black p-1 w-[4%]">NA</th>
-              <th className="border-2 border-black p-1">Descripción / Detalles Adicionales</th>
+              <th className="border border-black p-1 w-[55%]">Hallazgo / Evidencia Directa</th>
+              <th className="border border-black p-1 w-[4%]">SI</th>
+              <th className="border border-black p-1 w-[4%]">NO</th>
+              <th className="border border-black p-1 w-[4%]">NA</th>
+              <th className="border border-black p-1">Descripción / Detalles Adicionales</th>
             </tr>
           </thead>
           <tbody>
@@ -193,14 +264,17 @@ const App: React.FC = () => {
         </table>
 
         {/* Consideraciones Print */}
-        <div className="bg-gray-100 border-x-2 border-t-2 border-black p-1 font-bold uppercase text-[10px]">4. Consideraciones y Conclusiones Finales</div>
-        <div className="border-2 border-black p-3 min-h-[120px] mb-4 text-justify whitespace-pre-wrap">
+        <div className="bg-gray-100 border-x border-t border-black p-1 font-bold uppercase text-[10px]">4. Consideraciones y Conclusiones Finales</div>
+        <div className="border border-black p-3 min-h-[120px] mb-2 text-justify whitespace-pre-wrap">
           {formData.consideracionesFinales || "No hay observaciones finales registradas."}
         </div>
 
+        {/* Control de Cambios (Print) - Versión simplificada sin tabla */}
+        <ControlDeCambiosPrint />
+
         {/* Firmas Print - Boxed style */}
-        <div className="bg-gray-100 border-x-2 border-t-2 border-black p-1 font-bold uppercase text-[10px]">Firmas de Responsables</div>
-        <table className="w-full border-collapse border-2 border-black">
+        <div className="bg-gray-100 border-x border-t border-black p-1 font-bold uppercase text-[10px] mt-4">Firmas de Responsables</div>
+        <table className="w-full border-collapse border border-black">
           <tbody>
             <tr>
               <td className="w-1/2 border border-black p-4 align-top">
@@ -241,10 +315,16 @@ const App: React.FC = () => {
         <header className="bg-white/90 backdrop-blur-md border-b sticky top-0 z-30 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 py-2 md:py-3 flex justify-between items-center">
             <div className="flex items-center gap-2 md:gap-4">
-              <img src="https://picsum.photos/seed/bogota/80/32" alt="Logo" className="h-8 md:h-10 object-contain" />
+              <div className="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Secretar%C3%ADa_de_Ambiente_de_Bogot%C3%A1.svg/1200px-Secretar%C3%ADa_de_Ambiente_de_Bogot%C3%A1.svg.png" 
+                     alt="SDA" className="h-6 md:h-8 object-contain" />
+                <div className="w-[1px] h-6 bg-slate-200"></div>
+                <img src="https://seeklogo.com/images/A/alcaldia-mayor-de-bogota-logo-2623B68A57-seeklogo.com.png" 
+                     alt="Bogotá" className="h-6 md:h-8 object-contain" />
+              </div>
               <div className="border-l pl-3 hidden sm:block">
                 <h1 className="text-[10px] md:text-sm font-bold uppercase text-gray-700 leading-tight">Acta Técnica EEP</h1>
-                <p className="text-[9px] md:text-xs text-gray-400 font-medium">Formato Digital PM04</p>
+                <p className="text-[9px] md:text-xs text-gray-400 font-medium">Formato Digital PM04-PR88-M2</p>
               </div>
             </div>
             <div className="flex gap-1 md:gap-2">
@@ -281,10 +361,10 @@ const App: React.FC = () => {
           <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
             <div>
               <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest block mb-1">Estructura Ecológica Principal</span>
-              <h2 className="text-sm font-bold text-slate-800">Evaluación de Campo - PM04-PR88-M2</h2>
+              <h2 className="text-sm font-bold text-slate-800">Evaluación de Campo - Acta Técnica</h2>
             </div>
             <div className="text-right hidden sm:block">
-              <span className="text-[10px] font-mono text-slate-400 uppercase">Ver. 03 - Vigencia 2024</span>
+              <span className="text-[10px] font-mono text-slate-400 uppercase">PM04-PR88-M2 Ver. 3</span>
             </div>
           </div>
 
@@ -402,6 +482,9 @@ const App: React.FC = () => {
               value={formData.consideracionesFinales}
               onChange={(e) => setFormData(prev => ({ ...prev, consideracionesFinales: e.target.value }))}
             />
+            
+            {/* Control de Cambios en UI para referencia (Versión simplificada) */}
+            <ControlDeCambiosInfo />
           </section>
 
           {/* Signatures Section */}
@@ -426,7 +509,7 @@ const App: React.FC = () => {
         </footer>
 
         {/* Floating Action Mobile */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl rounded-full p-2 md:hidden flex justify-between gap-2 z-50">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-sm:w-[92%] max-w-sm bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl rounded-full p-2 md:hidden flex justify-between gap-2 z-50">
           <button
             onClick={handlePrint}
             className="flex-1 bg-white text-slate-900 py-3 px-6 rounded-full font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
